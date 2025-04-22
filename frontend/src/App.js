@@ -13,7 +13,7 @@ function App() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://localhost/login/backend/controller/UserController.php", {
+      const response = await fetch("http://localhost/login/login/backend/controller/UserController.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, senha }),
