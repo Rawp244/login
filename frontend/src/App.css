@@ -1,0 +1,138 @@
+/* Reset básico e fontes */
+body {
+  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  background-color: #f0f2f5; /* Um cinza claro de fundo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Ocupa a altura total da viewport */
+  color: #333;
+}
+
+/* Container principal da aplicação */
+.App {
+  text-align: center;
+  width: 100%;
+  max-width: 400px; /* Largura máxima para os formulários */
+  padding: 20px;
+  box-sizing: border-box; /* Garante que padding não adicione largura extra */
+}
+
+/* Estilo para as telas de Autenticação (Login/Register) */
+.auth-container {
+  background-color: #ffffff;
+  padding: 35px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+  text-align: center;
+  margin-bottom: 20px; /* Espaço caso haja múltiplos containers */
+}
+
+.auth-container h2 {
+  margin-bottom: 25px;
+  color: #2c3e50; /* Um azul escuro para os títulos */
+  font-size: 1.8em;
+}
+
+/* Grupo de input (label + input) */
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #555;
+  font-size: 0.95em;
+  font-weight: 600; /* Negrito para o label */
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da; /* Borda mais suave */
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 1em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group input:focus {
+  border-color: #007bff; /* Borda azul ao focar */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra suave ao focar */
+  outline: none; /* Remove o outline padrão */
+}
+
+/* Botão de Autenticação */
+.auth-button {
+  background-color: #007bff; /* Azul primário */
+  color: #fff;
+  padding: 14px 25px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: 600;
+  width: 100%;
+  margin-top: 15px;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.auth-button:hover {
+  background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
+  transform: translateY(-1px); /* Pequeno efeito de elevação */
+}
+
+.auth-button:active {
+  transform: translateY(0); /* Volta ao normal ao clicar */
+}
+
+/* Mensagens (sucesso, erro) */
+.message {
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 0.9em;
+  background-color: #d4edda; /* Verde claro para sucesso */
+  color: #155724; /* Verde escuro para sucesso */
+  border: 1px solid #c3e6cb;
+}
+
+.error-message {
+  background-color: #f8d7da; /* Vermelho claro para erro */
+  color: #721c24; /* Vermelho escuro para erro */
+  border: 1px solid #f5c6cb;
+}
+
+/* Links (para alternar entre login/cadastro) */
+.link-button {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 0.9em;
+  margin-top: 15px;
+  display: block; /* Para que o margin-top funcione */
+}
+
+.link-button:hover {
+  text-decoration: underline;
+}
+
+/* Estilo para a tela de Dashboard (após login) */
+.dashboard-container {
+  background-color: #fff;
+  padding: 60px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.dashboard-container h1 {
+  color: #28a745; /* Verde para a mensagem de sucesso */
+  font-size: 2.5em;
+  margin-bottom: 0;
+}

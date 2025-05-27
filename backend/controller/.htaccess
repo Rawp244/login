@@ -1,0 +1,10 @@
+# backend/controller/.htaccess
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    # Garante que o arquivo exista fisicamente, senão reescreve
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    # Reescreve qualquer requisição para UserController.php
+    RewriteRule ^(.*)$ UserController.php [QSA,L]
+</IfModule>

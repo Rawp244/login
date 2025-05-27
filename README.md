@@ -1,0 +1,32 @@
+# Projeto Tela de Cadastro - Full Stack
+
+Este projeto é um sistema simples de cadastro de usuário usando arquitetura MVC.
+
+## Tecnologias utilizadas
+
+- **Frontend**: React
+- **Backend**: PHP (Controller e Model)
+- **Banco de dados**: PostgreSQL
+- **Servidor local**: XAMPP
+
+## Funcionalidade atual
+
+- Tela de cadastro
+- Dados são salvos no banco de dados PostgreSQL
+- Backend recebe requisição do React e insere no banco via PDO
+
+## Como rodar o projeto
+
+1. Instale Node.js, PHP, PostgreSQL e XAMPP
+2. Coloque o projeto dentro da pasta `htdocs` do XAMPP
+3. Crie o banco `loginmvc` e a tabela `usuarios`
+4. Ajuste a conexão com o banco no arquivo: `backend/config/db.php`
+5. No terminal, vá até `frontend/` e rode:
+
+```bash
+npm install
+npm start
+# login
+# login
+# login
+# login
