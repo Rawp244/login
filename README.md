@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Projeto Sistema de Autenticação Full Stack (Login e Cadastro)
 
 Este projeto é um sistema completo de autenticação (login e cadastro de usuários) seguindo a arquitetura MVC. Ele foi desenvolvido com foco na prática de integração entre frontend e backend, incluindo segurança de senhas e sistema de logs.
@@ -152,3 +153,37 @@ Certifique-se de ter as seguintes ferramentas instaladas:
     * Verifique o arquivo `backend/logs/application_errors.log` se o log de DB falhar por algum motivo.
 
 ---
+=======
+# Projeto Tela de Cadastro - Full Stack
+
+Este projeto é um sistema simples de cadastro de usuário usando arquitetura MVC.
+
+## Tecnologias utilizadas
+
+- **Frontend**: React
+- **Backend**: PHP (Controller e Model)
+- **Banco de dados**: PostgreSQL
+- **Servidor local**: XAMPP
+
+## Funcionalidade atual
+
+- Tela de cadastro
+- Dados são salvos no banco de dados PostgreSQL
+- Backend recebe requisição do React e insere no banco via PDO
+
+## Como rodar o projeto
+
+1. Instale Node.js, PHP, PostgreSQL e XAMPP
+2. Coloque o projeto dentro da pasta `htdocs` do XAMPP
+3. Crie o banco `loginmvc` e a tabela `usuarios`
+4. Ajuste a conexão com o banco no arquivo: `backend/config/db.php`
+5. No terminal, vá até `frontend/` e rode:
+
+```bash
+npm install
+npm start
+# login
+# login
+# login
+# login
+>>>>>>> 6a1e99a490e7a70324a1eb194a411ddde497eaa0
