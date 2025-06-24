@@ -1,0 +1,249 @@
+/* C:\xampp\htdocs\loginmvc\frontend\src\styles\DashboardPage.css */
+
+.dashboard-layout {
+    display: flex; /* Define o layout principal como flexbox */
+}
+
+.dashboard-container {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #f0f2f5; /* Um cinza claro de fundo */
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    font-family: 'Poppins', sans-serif; /* Fonte moderna */
+    color: #333;
+    min-height: 80vh; /* Garante que a página não fique muito curta */
+    /* Removido display: flex; flex-direction: column; daqui, pois o .main-content vai gerenciar */
+    align-items: center; /* Centraliza conteúdo se não usar SideMenu */
+    justify-content: flex-start;
+}
+
+.main-content {
+    flex-grow: 1; /* Ocupa o espaço restante disponível */
+    padding: 20px; /* Padding no conteúdo principal */
+    /* Margem para compensar o menu lateral fixo. Ajuste se o SideMenu tiver largura diferente. */
+    margin-left: 250px; /* Largura padrão do SideMenu */
+    width: calc(100% - 250px); /* Ocupa a largura total menos a do SideMenu */
+    box-sizing: border-box; /* Garante que padding não aumente a largura */
+}
+
+
+.dashboard-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between; /* Espaçamento entre o título e o botão de sair */
+    align-items: center;
+    padding-left: 20px; /* Pequeno padding para o texto do cabeçalho */
+    padding-right: 20px; /* Pequeno padding para o botão de sair */
+    box-sizing: border-box;
+}
+
+.dashboard-header h1 {
+    font-size: 3em;
+    color: #2c3e50; /* Azul escuro */
+    margin-bottom: 0; /* Removido margem inferior */
+    font-weight: 700;
+}
+
+.logout-button {
+    background-color: #e74c3c; /* Vermelho */
+    color: white;
+    padding: 10px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    /* align-self: flex-end; /* Removido, já que o justify-content fará o trabalho */
+    /* margin-top: -50px; /* Removido, pois pode causar problemas com o layout flex */
+    /* margin-right: 20px; /* Removido, o padding no header já o afasta da borda */
+}
+
+.logout-button:hover {
+    background-color: #c0392b;
+    transform: translateY(-2px);
+}
+
+/* Responsividade para o cabeçalho */
+@media (max-width: 768px) {
+    .dashboard-header {
+        flex-direction: column; /* Pilha os itens verticalmente */
+        align-items: center;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    .dashboard-header h1 {
+        font-size: 2.5em;
+        margin-bottom: 15px; /* Adiciona margem entre o título e o botão */
+    }
+    .logout-button {
+        align-self: center; /* Centraliza o botão */
+        margin-top: 0;
+        margin-right: 0;
+    }
+    .main-content {
+        margin-left: 80px; /* Ajusta offset para o menu recolhido em mobile */
+        width: calc(100% - 80px);
+    }
+}
+@media (max-width: 480px) {
+    .dashboard-header h1 {
+        font-size: 2em;
+    }
+    .logout-button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}
+
+
+.dashboard-section {
+    width: 100%;
+    margin-bottom: 50px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box; /* Inclui padding e borda no cálculo da largura/altura */
+}
+
+.dashboard-section h2 {
+    font-size: 2.2em;
+    color: #34495e;
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 15px;
+}
+
+.dashboard-section p {
+    text-align: center;
+    color: #666;
+    margin-bottom: 30px;
+    font-size: 1.1em;
+}
+
+.dashboard-links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 30px;
+    justify-content: center;
+    align-items: stretch; /* Garante que cards com mais conteúdo tenham a mesma altura */
+    padding: 0 20px;
+}
+
+.dashboard-card {
+    background-color: #ecf0f1; /* Cinza claro */
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 180px; /* Altura mínima para os cards */
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-card h3 {
+    font-size: 1.5em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.dashboard-card p {
+    font-size: 0.95em;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 0;
+}
+
+/* Cores específicas para cards de admin e usuário */
+.admin-card {
+    border: 2px solid #3498db; /* Azul */
+    background-color: #eaf6fd;
+}
+
+.admin-card:hover {
+    background-color: #d6eafc;
+}
+
+.user-card {
+    border: 2px solid #2ecc71; /* Verde */
+    background-color: #e6faed;
+}
+
+.user-card:hover {
+    background-color: #d1f7de;
+}
+
+/* Responsividade para links do dashboard */
+@media (max-width: 1024px) {
+    .dashboard-links {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+    }
+}
+@media (max-width: 768px) {
+    .dashboard-links {
+        grid-template-columns: 1fr; /* Uma coluna em telas muito pequenas */
+        gap: 20px;
+    }
+    .dashboard-card {
+        min-height: 150px;
+    }
+}
+
+
+/* Estilo para a seção do mapa */
+.map-section {
+    padding: 20px; /* Reduz o padding da seção para o mapa ter mais espaço */
+}
+
+.map-container-wrapper {
+    height: 500px; /* Altura fixa para o mapa */
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden; /* Garante que o mapa não vaze os cantos arredondados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* A classe 'leaflet-container' é adicionada pelo react-leaflet */
+.dashboard-map.leaflet-container {
+    height: 100%; /* O mapa preenche a altura do seu wrapper */
+    width: 100%;
+    border-radius: 8px; /* Mantém os cantos arredondados */
+}
+
+/* Estilo para o loader básico */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 1.5em;
+    color: #555;
+}
+
+/* Ajustes para o layout principal com SideMenu (importante para o main-content) */
+/* O .main-content já foi ajustado para ter margin-left: 250px; para o SideMenu fixo. */
+/* Se você habilitar a responsividade do SideMenu para mobile (recolher),
+   precisará de uma regra como a abaixo (já presente no SideMenu.css, mas aqui para o main-content) */
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 80px; /* Ajusta offset para o menu recolhido em mobile */
+        width: calc(100% - 80px); /* Garante que o conteúdo principal não transborde */
+    }
+}

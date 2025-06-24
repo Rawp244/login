@@ -1,0 +1,483 @@
+/* frontend/src/styles/erp/PedidosPage.css */
+
+.erp-page-container {
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 50px auto;
+    max-width: 1200px;
+    border: 1px solid #e0e0e0;
+    overflow-x: auto; /* Garante que a tabela seja scrollável se for muito larga */
+}
+
+.erp-page-container h2 {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+.form-section, .list-section {
+    margin-top: 30px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+.highlight-box {
+    background-color: #f0f0f0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #d0d0d0;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.form-section h3, .list-section h3 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.input-group input[type="text"],
+.input-group input[type="number"],
+.input-group select,
+.input-group textarea {
+    width: calc(100% - 24px); /* Ajusta para padding */
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box; /* Garante que padding e borda não aumentem o width */
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* NOVO: Wrapper para os painéis Cliente e Itens do Pedido */
+.pedido-panels-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr; /* Coluna do cliente (menor) e itens (maior) */
+    gap: 25px; /* Espaçamento entre os painéis */
+    margin-bottom: 25px;
+}
+
+.pedido-panel {
+    padding: 20px;
+    border: 1px solid #e9ecef; /* Borda mais suave para os painéis */
+    border-radius: 8px;
+    background-color: #fdfdfe; /* Fundo levemente diferente */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.client-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Espaçamento entre o select e o botão de novo cliente */
+}
+
+/* Ajuste para o select de cliente dentro do client-panel */
+.client-panel .input-group select {
+    flex-grow: 1; /* Permite que o select de cliente preencha o espaço */
+    min-width: unset; /* Remove min-width fixo se houver um */
+    width: 100%; /* Garante largura total dentro do seu container */
+}
+
+/* NOVO: Estilo para o botão "Novo Cliente" que acompanha o select */
+.client-select-group { /* Já existe, mas o flex agora é no .client-panel */
+    display: flex;
+    flex-direction: column; /* Coloca label em cima do select/button */
+    gap: 5px; /* Espaçamento entre label e input */
+}
+.client-select-group .action-button.small-button {
+    align-self: flex-start; /* Alinha o botão "Novo Cliente" à esquerda */
+    margin-top: 0; /* Remove margem superior indesejada */
+}
+
+
+.item-section h4 {
+    color: #34495e; /* Cor para títulos internos da seção de itens */
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.item-input-group {
+    display: grid; /* Usando grid para melhor alinhamento dos inputs de item */
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* 3 colunas flexíveis */
+    gap: 15px;
+    align-items: flex-end; /* Alinha os botões com os campos */
+    margin-bottom: 20px;
+}
+
+.item-input-group select,
+.item-input-group input {
+    width: 100%; /* Ocupa a largura total da célula do grid */
+    box-sizing: border-box;
+    height: 42px; /* Altura fixa para alinhar inputs */
+}
+
+/* Redefinir largura para inputs de quantidade e preço se necessário */
+.item-input-group input[name="quantity"] {
+    max-width: none; /* Anula max-width para grid */
+}
+.item-input-group input[name="price_at_order"] {
+    max-width: none; /* Anula max-width para grid */
+}
+
+
+.item-input-group button {
+    height: 42px; /* Alinha com a altura dos inputs */
+    width: auto; /* Deixa o botão se ajustar ao conteúdo */
+    flex-shrink: 0;
+    margin-left: unset; /* Desfaz margin-left: auto para flex */
+}
+
+.added-items-list {
+    margin-top: 20px;
+    border-top: 1px dashed #eee;
+    padding-top: 20px;
+}
+
+.added-items-list h4 {
+    color: #34495e;
+    margin-bottom: 10px;
+    text-align: left; /* Alinhar título da lista de itens à esquerda */
+}
+
+.added-items-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.added-items-list li {
+    background-color: #f8f8f8;
+    border: 1px solid #eee;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.95em;
+}
+
+.remove-item-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Botão redondo */
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.8em;
+    transition: background-color 0.2s;
+}
+
+.remove-item-button:hover {
+    background-color: #c82333;
+}
+
+.total-amount {
+    text-align: right;
+    font-size: 1.4em;
+    color: #2c3e50;
+    margin-top: 25px;
+    padding-top: 15px;
+    border-top: 2px solid #3498db;
+}
+
+/* NOVO: Controles do rodapé do formulário */
+.bottom-form-controls {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.form-buttons-row {
+    display: flex;
+    justify-content: flex-end; /* Alinha os botões à direita */
+    gap: 15px; /* Espaçamento entre os botões */
+    margin-top: 20px;
+}
+
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    white-space: nowrap;
+}
+
+.action-button.primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.action-button.secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.action-button.secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+.action-button.edit {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.action-button.edit:hover {
+    background-color: #e0a800;
+    transform: translateY(-1px);
+}
+
+.action-button.delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.action-button.delete:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+.action-button.small {
+    padding: 5px 10px;
+    font-size: 0.85em;
+}
+
+/* Botão grande para Adicionar/Atualizar Pedido */
+.action-button.large-button {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    width: auto; /* Ajuste a largura, não 100% se estiver em um grupo */
+}
+
+
+/* Estilo da Tabela de Dados */
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top; /* Alinha o conteúdo ao topo da célula */
+}
+
+.data-table th:nth-child(3), /* Valor Total */
+.data-table td:nth-child(3) {
+    text-align: right; /* Alinha números à direita */
+    white-space: nowrap; /* Evita quebra de linha em valores */
+}
+
+.data-table th:nth-child(4), /* Tipo de Venda */
+.data-table td:nth-child(4) {
+    white-space: nowrap;
+}
+
+.data-table thead th {
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
+}
+
+.data-table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.data-table thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table tbody tr:hover {
+    background-color: #e6f2ff;
+    cursor: default;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.actions-column {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+/* Estilos específicos para a tabela de itens dentro do formulário */
+.item-table {
+    margin-top: 15px;
+    border: 1px solid #e0e0e0;
+    box-shadow: none;
+}
+
+.item-table th {
+    background-color: #e9ecef;
+    color: #343a40;
+}
+
+.item-table td {
+    vertical-align: middle;
+}
+
+.item-table td:nth-child(2), /* Qtd. */
+.item-table td:nth-child(3), /* Preço Unit. */
+.item-table td:nth-child(4) { /* Total Item */
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+/* Lista de itens dentro da tabela de pedidos (visualização) */
+.order-items-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9em;
+    max-width: 250px;
+    word-wrap: break-word;
+}
+
+.order-items-list li {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #eee;
+}
+
+.order-items-list li:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.total-amount {
+    text-align: right;
+    font-size: 1.2em;
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+/* Mensagens */
+.message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Responsividade geral da página de pedidos */
+@media (max-width: 992px) {
+    .pedido-panels-wrapper {
+        grid-template-columns: 1fr; /* Pilha as seções em uma coluna em telas menores */
+    }
+}
+
+@media (max-width: 768px) {
+    .erp-page-container {
+        padding: 20px;
+        margin: 20px auto;
+    }
+    .form-section, .list-section {
+        padding: 15px;
+    }
+    .form-section h3, .list-section h3 {
+        font-size: 1.3em;
+    }
+    .input-group input, .input-group select, .input-group textarea {
+        padding: 8px 10px;
+        font-size: 0.9em;
+    }
+    .action-button.large-button {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+    .client-select-group select, .item-input-group select, .item-input-group input {
+        min-width: unset; /* Remove largura mínima para que se ajustem melhor */
+    }
+    .item-input-group {
+        grid-template-columns: 1fr; /* Uma coluna para inputs de item em mobile */
+        gap: 10px;
+    }
+    .item-input-group button {
+        width: 100%; /* Botão de item ocupa largura total em mobile */
+    }
+    .form-buttons-row {
+        flex-direction: column; /* Botões um abaixo do outro em mobile */
+        gap: 10px;
+    }
+    .action-button.large-button {
+        width: 100%; /* Botões finais ocupam largura total em mobile */
+    }
+}

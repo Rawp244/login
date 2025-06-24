@@ -1,15 +1,14 @@
-<<<<<<< HEAD
+/* frontend/src/App.css */
+
 /* Reset básico e fontes */
 body {
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
-  background-color: #f0f2f5; /* Um cinza claro de fundo */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh; /* Ocupa a altura total da viewport */
+  background-color: #f0f2f5; /* Um cinza claro de fundo para a página */
+  /* Removido display: flex, justify-content, align-items, min-height daqui */
+  /* Eles são mais adequados para o .App ou containers específicos */
   color: #333;
 }
 
@@ -17,24 +16,31 @@ body {
 .App {
   text-align: center;
   width: 100%;
-  max-width: 400px; /* Largura máxima para os formulários */
-  padding: 20px;
-  box-sizing: border-box; /* Garante que padding não adicione largura extra */
+  min-height: 100vh; /* Garante que o App sempre ocupe no mínimo a altura da tela */
+  display: flex; /* Adiciona flexbox */
+  flex-direction: column; /* Organiza os itens em coluna */
+  align-items: center; /* Centraliza horizontalmente */
+  justify-content: flex-start; /* Alinha o conteúdo ao topo, permitindo expandir */
+  /* padding-top: 50px; Adiciona um padding no topo para conteúdo que não seja centralizado imediatamente */
+  box-sizing: border-box; /* Inclui padding e border na largura/altura */
 }
 
 /* Estilo para as telas de Autenticação (Login/Register) */
+/* Estes containers serão centralizados dentro do .App */
 .auth-container {
   background-color: #ffffff;
   padding: 35px;
   border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra mais suave */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
-  margin-bottom: 20px; /* Espaço caso haja múltiplos containers */
+  margin: auto; /* Centraliza vertical e horizontalmente para esses formulários */
+  max-width: 400px;
+  width: 100%;
 }
 
 .auth-container h2 {
   margin-bottom: 25px;
-  color: #2c3e50; /* Um azul escuro para os títulos */
+  color: #2c3e50;
   font-size: 1.8em;
 }
 
@@ -49,13 +55,13 @@ body {
   margin-bottom: 8px;
   color: #555;
   font-size: 0.95em;
-  font-weight: 600; /* Negrito para o label */
+  font-weight: 600;
 }
 
 .input-group input {
   width: 100%;
   padding: 12px;
-  border: 1px solid #ced4da; /* Borda mais suave */
+  border: 1px solid #ced4da;
   border-radius: 5px;
   box-sizing: border-box;
   font-size: 1em;
@@ -63,14 +69,14 @@ body {
 }
 
 .input-group input:focus {
-  border-color: #007bff; /* Borda azul ao focar */
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Sombra suave ao focar */
-  outline: none; /* Remove o outline padrão */
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
 }
 
 /* Botão de Autenticação */
 .auth-button {
-  background-color: #007bff; /* Azul primário */
+  background-color: #007bff;
   color: #fff;
   padding: 14px 25px;
   border: none;
@@ -84,12 +90,12 @@ body {
 }
 
 .auth-button:hover {
-  background-color: #0056b3; /* Azul mais escuro ao passar o mouse */
-  transform: translateY(-1px); /* Pequeno efeito de elevação */
+  background-color: #0056b3;
+  transform: translateY(-1px);
 }
 
 .auth-button:active {
-  transform: translateY(0); /* Volta ao normal ao clicar */
+  transform: translateY(0);
 }
 
 /* Mensagens (sucesso, erro) */
@@ -99,14 +105,14 @@ body {
   border-radius: 5px;
   font-weight: bold;
   font-size: 0.9em;
-  background-color: #d4edda; /* Verde claro para sucesso */
-  color: #155724; /* Verde escuro para sucesso */
+  background-color: #d4edda;
+  color: #155724;
   border: 1px solid #c3e6cb;
 }
 
 .error-message {
-  background-color: #f8d7da; /* Vermelho claro para erro */
-  color: #721c24; /* Vermelho escuro para erro */
+  background-color: #f8d7da;
+  color: #721c24;
   border: 1px solid #f5c6cb;
 }
 
@@ -116,7 +122,7 @@ body {
   text-decoration: none;
   font-size: 0.9em;
   margin-top: 15px;
-  display: block; /* Para que o margin-top funcione */
+  display: block;
 }
 
 .link-button:hover {
@@ -130,50 +136,12 @@ body {
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   text-align: center;
+  margin: auto; /* Centraliza também */
+  max-width: 600px;
 }
 
 .dashboard-container h1 {
-  color: #28a745; /* Verde para a mensagem de sucesso */
+  color: #28a745;
   font-size: 2.5em;
   margin-bottom: 0;
 }
-=======
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
->>>>>>> 6a1e99a490e7a70324a1eb194a411ddde497eaa0

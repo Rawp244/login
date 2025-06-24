@@ -1,0 +1,208 @@
+/* frontend/src/styles/erp/ProdutosPage.css */
+.erp-page-container {
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 50px auto;
+    max-width: 1100px;
+    border: 1px solid #e0e0e0;
+    overflow-x: auto;
+}
+
+.erp-page-container h2 {
+    margin-bottom: 25px;
+    color: #2c3e50;
+    font-size: 2.2em;
+    font-weight: 700;
+}
+
+.form-section, .list-section {
+    margin-top: 30px;
+    padding: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #fdfdfd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: left;
+}
+
+/* Novo estilo para a caixa de destaque */
+.highlight-box {
+    background-color: #f0f0f0; /* Um cinza claro */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Sombra mais pronunciada */
+    border: 1px solid #d0d0d0;
+    padding: 30px; /* Um pouco mais de padding */
+    margin-bottom: 30px; /* Espaçamento abaixo da caixa */
+}
+
+.form-section h3, .list-section h3 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-align: center;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.input-group input[type="text"],
+.input-group input[type="email"],
+.input-group input[type="number"], /* Manter type="number" para estoque */
+.input-group textarea {
+    width: calc(100% - 24px);
+    padding: 10px 12px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    font-size: 1em;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+/* Botões de Ação (Adicionar/Atualizar, Editar, Excluir, Cancelar) */
+.action-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 600;
+    margin-right: 10px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    white-space: nowrap; /* Evita que o texto quebre */
+}
+
+.action-button.primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.action-button.primary:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.action-button.secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.action-button.secondary:hover {
+    background-color: #5a6268;
+    transform: translateY(-1px);
+}
+
+.action-button.edit {
+    background-color: #ffc107;
+    color: #333;
+}
+
+.action-button.edit:hover {
+    background-color: #e0a800;
+    transform: translateY(-1px);
+}
+
+.action-button.delete {
+    background-color: #dc3545;
+    color: white;
+}
+
+.action-button.delete:hover {
+    background-color: #c82333;
+    transform: translateY(-1px);
+}
+
+/* Estilo da Tabela de Dados */
+.data-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.data-table th, .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.data-table thead th {
+    background-color: #007bff;
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9em;
+    letter-spacing: 0.5px;
+}
+
+.data-table thead th:first-child {
+    border-top-left-radius: 8px;
+}
+
+.data-table thead th:last-child {
+    border-top-right-radius: 8px;
+}
+
+.data-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table tbody tr:hover {
+    background-color: #e6f2ff;
+    cursor: default;
+}
+
+.data-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Centraliza os botões de ação na célula da tabela */
+.actions-column {
+    display: flex;
+    gap: 8px; /* Espaçamento entre os botões */
+    flex-wrap: wrap; /* Permite que os botões quebrem a linha se não houver espaço suficiente */
+    justify-content: flex-start; /* Alinha os botões ao início da célula */
+}
+
+/* Mensagens */
+.message {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.9em;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}

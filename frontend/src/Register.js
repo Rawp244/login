@@ -1,52 +1,55 @@
+// frontend/src/Register.js (Exemplo, adapte se seu arquivo for diferente)
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 function Register() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState(''); // <--- ALTERADO
   const [senha, setSenha] = useState('');
-  const [mensagem, setMensagem] = useState('');
+  const [role, setRole] = useState('user'); // Padrão
   const navigate = useNavigate();
 
   const handleRegister = async () => {
-    setMensagem(''); // Limpa mensagens anteriores
-    if (!email || !senha) {
-        setMensagem('Por favor, preencha todos os campos.');
+    if (!username || !senha) { // <--- ALTERADO
+        toast.error('Por favor, preencha seu nome de usuário e senha.'); // <--- ALTERADO
         return;
     }
 
     try {
-      // ESTE TRECHO JÁ CHAMA SEU BACKEND PHP DE CADASTRO ORIGINAL
-     const response = await fetch("http://localhost/loginmvc/backend/controller/UserController.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, senha }),
-});
+      const response = await fetch("http://localhost/loginmvc/backend/controller/UserController.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, senha, role }), // <--- ENVIANDO USERNAME
+      });
 
       const data = await response.json();
-      setMensagem(data.mensagem || data.erro);
 
-      if (data.mensagem === "Usuário salvo com sucesso") {
-        // Redirecionar para a tela de login após o cadastro bem-sucedido
+      if (response.ok) {
+        toast.success(data.mensagem || "Usuário registrado com sucesso!");
         setTimeout(() => {
-          navigate('/'); // Redireciona para a rota raiz, que é o login
-        }, 1500); // Espera 1.5 segundos para o usuário ver a mensagem
+          navigate('/login');
+        }, 1000);
+      } else {
+        toast.error(data.erro || "Erro desconhecido ao registrar usuário.");
       }
     } catch (error) {
-      setMensagem("Erro ao conectar com o servidor.");
+      console.error("Erro ao conectar com o servidor de registro:", error);
+      toast.error("Erro ao conectar com o servidor. Verifique sua conexão ou o servidor.");
     }
   };
 
   return (
     <div className="auth-container">
-      <h2>Cadastro de Usuário</h2>
+      <h2>Cadastro</h2>
       <div className="input-group">
-        <label htmlFor="email">E-mail</label>
+        <label htmlFor="username">Nome de Usuário</label> {/* <--- LABEL ALTERADO */}
         <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Seu e-mail"
+          type="text" // <--- TIPO ALTERADO
+          id="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Escolha um nome de usuário" // <--- PLACEHOLDER ALTERADO
+          required
         />
       </div>
       <div className="input-group">
@@ -56,12 +59,12 @@ function Register() {
           id="senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          placeholder="Sua senha"
+          placeholder="Crie uma senha"
+          required
         />
       </div>
-      <button onClick={handleRegister} className="auth-button">Cadastrar</button>
-      {mensagem && <p className="message">{mensagem}</p>}
-      <p>Já tem uma conta? <Link to="/" className="link-button">Faça login</Link></p>
+      <button onClick={handleRegister} className="auth-button">Registrar</button>
+      <p>Já tem uma conta? <Link to="/login" className="link-button">Fazer Login</Link></p>
     </div>
   );
 }
