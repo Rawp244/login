@@ -1,127 +1,163 @@
 <?php
-<<<<<<< HEAD
 // backend/controller/UserController.php
-
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
-header("Access-Control-Max-Age: 3600");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 require_once __DIR__ . '/../model/UserModel.php';
 require_once __DIR__ . '/../utils/Logger.php';
+require_once __DIR__ . '/../utils/Auth.php';
+require_once __DIR__ . '/../../vendor/autoload.php'; // Caminho correto
+
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
+header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 $userModel = new UserModel();
 $logger = new Logger();
 
-$request_method = $_SERVER["REQUEST_METHOD"];
-
-switch ($request_method) {
-    case 'POST':
-        $data = json_decode(file_get_contents("php://input"));
-
-        // --- INÍCIO DO NOVO DEBUG E LÓGICA DE ROTEAMENTO ---
-        // Limpa o REQUEST_URI para pegar apenas o "caminho" relevante após UserController.php
-        $script_name = basename($_SERVER['SCRIPT_NAME']); // Deve ser "UserController.php"
-        $base_path = '/loginmvc/backend/controller/'; // O caminho do seu controlador no htdocs
-        $relative_uri = str_replace($base_path . $script_name, '', $_SERVER['REQUEST_URI']);
-
-        // Verifica se a requisição é para /login (considerando o pathinfo)
-        $isLoginRequest = (strpos($relative_uri, '/login') !== false);
-
-        error_log("DEBUG: FULL_REQUEST_URI: " . $_SERVER['REQUEST_URI']);
-        error_log("DEBUG: RELATIVE_URI (after script name): " . $relative_uri);
-        error_log("DEBUG: IS_LOGIN_REQUEST: " . ($isLoginRequest ? 'TRUE' : 'FALSE'));
-
-        // --- FIM DO NOVO DEBUG E LÓGICA DE ROTEAMENTO ---
-
-        if (!isset($data->email) || !isset($data->senha)) {
-            echo json_encode(["erro" => "E-mail e senha são obrigatórios."]);
-            $logger->error("Tentativa de requisição POST sem e-mail/senha.", ['request_data' => $data]);
-            http_response_code(400); // Bad Request
-            exit();
-        }
-
-        $email = $data->email;
-        $senha = $data->senha;
-
-        // Usa a nova variável de controle para rotear
-        if ($isLoginRequest) {
-            error_log("DEBUG: Entrando no bloco de LOGIN"); // Log extra
-            // Lógica de Login
-            $usuario = $userModel->buscarUsuarioPorEmailESenha($email, $senha);
-
-            if ($usuario) {
-                echo json_encode(["mensagem" => "Login bem-sucedido!", "usuario" => ["id" => $usuario['id'], "email" => $usuario['email']]]);
-                $logger->info("Login bem-sucedido para o usuário: " . $email);
-                http_response_code(200); // OK
-            } else {
-                echo json_encode(["erro" => "E-mail ou senha inválidos."]);
-                $logger->warning("Falha no login para o e-mail: " . $email);
-                http_response_code(401); // Unauthorized
-            }
-        } else {
-            error_log("DEBUG: Entrando no bloco de CADASTRO"); // Log extra
-            // Lógica de Cadastro
-            // Primeiro, verifique se o usuário já existe para evitar duplicidade
-            if ($userModel->buscarUsuarioPorEmailESenha($email, '')) {
-                echo json_encode(["erro" => "Este e-mail já está cadastrado."]);
-                $logger->warning("Tentativa de cadastro com e-mail já existente: " . $email);
-                http_response_code(409); // Conflict
-                exit();
-            }
-
-            if ($userModel->salvarUsuario($email, $senha)) {
-                echo json_encode(["mensagem" => "Usuário salvo com sucesso"]);
-                $logger->info("Novo usuário cadastrado: " . $email);
-                http_response_code(201); // Created
-            } else {
-                echo json_encode(["erro" => "Não foi possível salvar o usuário."]);
-                $logger->error("Erro ao tentar salvar novo usuário: " . $email);
-                http_response_code(500); // Internal Server Error
-            }
-        }
-        break;
-
-    case 'OPTIONS':
-        http_response_code(200);
-        break;
-
-    default:
-        echo json_encode(["erro" => "Método não permitido."]);
-        $logger->error("Método de requisição não permitido: " . $request_method);
-        http_response_code(405); // Method Not Allowed
-        break;
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
-?>
-=======
-require_once '../model/UserModel.php';
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+$requestMethod = $_SERVER["REQUEST_METHOD"];
+$uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$uriSegments = explode('/', trim($uri, '/'));
 
-header('Content-Type: application/json');
-header('Access-Control-Allow-Origin: *'); // libera o acesso do React
-header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+$controllerBaseIndex = array_search('controller', $uriSegments);
 
-// 👉 Resposta só pra testar no navegador (GET)
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    echo json_encode(["mensagem" => "Controller funcionando"]);
+$controllerFile = isset($uriSegments[$controllerBaseIndex + 1]) ? $uriSegments[$controllerBaseIndex + 1] : null;
+$action = isset($uriSegments[$controllerBaseIndex + 2]) ? $uriSegments[$controllerBaseIndex + 2] : null;
+$resourceId = isset($uriSegments[$controllerBaseIndex + 3]) ? $uriSegments[$controllerBaseIndex + 3] : null;
+
+
+if ($requestMethod === 'GET' && empty($action)) {
+    echo json_encode(["mensagem" => "Controller funcionando: " . ($controllerFile ?? 'N/A')]);
     exit;
 }
 
-// 👉 Fluxo normal para receber dados do React (POST)
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $dados = json_decode(file_get_contents("php://input"), true);
 
-    if (isset($dados['email']) && isset($dados['senha'])) {
-        $userModel = new UserModel();
-        $resultado = $userModel->salvarUsuario($dados['email'], $dados['senha']);
-        echo json_encode($resultado);
-    } else {
-        echo json_encode(["erro" => "Campos incompletos."]);
+if ($requestMethod === 'POST' && $action === 'login') {
+    $dados = json_decode(file_get_contents("php://input"), true);
+    $username = $dados['username'] ?? '';
+    $senha = $dados['senha'] ?? '';
+
+    if (empty($username) || empty($senha)) {
+        $logger->log(Logger::WARNING, "Tentativa de login com campos incompletos.");
+        http_response_code(400);
+        echo json_encode(["erro" => "Nome de usuário e senha são obrigatórios."]);
+        exit;
     }
+
+    $usuario = $userModel->buscarUsuarioPorUsername($username);
+
+    if ($usuario && password_verify($senha, $usuario['senha'])) {
+        $logger->log(Logger::INFO, "Login bem-sucedido para o usuario: " . $username);
+        
+        $secret_key = 'NK/tEnnNSGQBCpfv7eBj6Knta/LBOAM6dijxyNZJYr8=';
+        $issuer_claim = "http://localhost";
+        $audience_claim = "http://localhost";
+        $issuedat_claim = time();
+        $notbefore_claim = $issuedat_claim;
+        $expire_claim = $issuedat_claim + (3600 * 24);
+
+        $token = array(
+            "iss" => $issuer_claim,
+            "aud" => $audience_claim,
+            "iat" => $issuedat_claim,
+            "nbf" => $notbefore_claim,
+            "exp" => $expire_claim,
+            "data" => array(
+                "user_id" => $usuario['id'], // <--- ESTE É O ID QUE VAI PARA O TOKEN
+                "username" => $usuario['username'],
+                "profile" => $usuario['role']
+            )
+        );
+
+        $jwt = JWT::encode($token, $secret_key, 'HS256');
+
+        echo json_encode([
+            "mensagem" => "Login bem-sucedido!",
+            "jwt" => $jwt,
+            "usuario" => [
+                "id" => $usuario['id'],
+                "username" => $usuario['username'],
+                "role" => $usuario['role']
+            ]
+        ]);
+
+    } else {
+        $logger->log(Logger::WARNING, "Tentativa de login falhou para o username: " . $username);
+        http_response_code(401);
+        echo json_encode(["erro" => "Nome de usuário ou senha inválidos."]);
+    }
+    exit;
 }
 
->>>>>>> 6a1e99a490e7a70324a1eb194a411ddde497eaa0
+if ($requestMethod === 'POST' && empty($action)) {
+    $dados = json_decode(file_get_contents("php://input"), true);
+    $username = $dados['username'] ?? '';
+    $senha = $dados['senha'] ?? '';
+    $role = $dados['role'] ?? 'user';
+
+    if (empty($username) || empty($senha)) {
+        http_response_code(400);
+        echo json_encode(["erro" => "Campos incompletos (nome de usuário e senha são obrigatórios)."]);
+        exit;
+    }
+
+    $resultado = $userModel->salvarUsuario($username, $senha, $role);
+    if (isset($resultado['erro'])) {
+        http_response_code(409);
+    } else {
+        http_response_code(201);
+    }
+    echo json_encode($resultado);
+    exit;
+}
+
+if ($requestMethod === 'GET' && $action === 'users') {
+    $userData = Auth::validateToken();
+    if (!$userData || ($userData['profile'] ?? null) !== 'admin') {
+        http_response_code(403);
+        echo json_encode(["erro" => "Acesso negado. Apenas administradores podem listar usuários."]);
+        exit();
+    }
+    $usuarios = $userModel->lerTodosUsuarios();
+    echo json_encode($usuarios);
+    exit;
+}
+
+if ($requestMethod === 'PUT' && $action === 'users' && $resourceId && (isset($uriSegments[$controllerBaseIndex + 4]) && $uriSegments[$controllerBaseIndex + 4] === 'role')) {
+    $userData = Auth::validateToken();
+    if (!$userData || ($userData['profile'] ?? null) !== 'admin') {
+        http_response_code(403);
+        echo json_encode(["erro" => "Acesso negado. Apenas administradores podem atualizar perfis."]);
+        exit();
+    }
+    $dados = json_decode(file_get_contents("php://input"), true);
+    $novo_perfil = $dados['role'] ?? null;
+
+    if (!$novo_perfil) {
+        http_response_code(400);
+        echo json_encode(["erro" => "Novo perfil não especificado."]);
+        exit();
+    }
+
+    $resultado = $userModel->atualizarPerfilUsuario($resourceId, $novo_perfil);
+    if (isset($resultado['erro'])) {
+        http_response_code(500);
+    } else {
+        http_response_code(200);
+    }
+    echo json_encode($resultado);
+    exit;
+}
+
+http_response_code(404);
+echo json_encode(["erro" => "Rota nao encontrada ou metodo nao permitido."]);
+

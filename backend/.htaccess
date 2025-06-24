@@ -1,0 +1,26 @@
+# C:\xampp\htdocs\loginmvc\backend\.htaccess
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Regra para UserController (login, register, users, users/id/role)
+    RewriteRule ^controller/UserController.php/login$ controller/UserController.php [QSA,L]
+    RewriteRule ^controller/UserController.php/users/?([0-9]*)/?([a-zA-Z]*)/?$ controller/UserController.php [QSA,L]
+    RewriteRule ^controller/UserController.php/?$ controller/UserController.php [QSA,L]
+
+
+    # Regras para os controladores ERP
+    # Para Produtos
+    RewriteRule ^controller/erp/ProdutoController.php/?([0-9]*)/?$ controller/erp/ProdutoController.php [QSA,L]
+    # Para Fornecedores
+    RewriteRule ^controller/erp/FornecedorController.php/?([0-9]*)/?$ controller/erp/FornecedorController.php [QSA,L]
+    # Para Estoque
+    RewriteRule ^controller/erp/EstoqueController.php/?([0-9]*)/?$ controller/erp/EstoqueController.php [QSA,L]
+
+
+    # Se nenhum arquivo/diretório existente corresponder, redireciona para o index.php padrão (opcional)
+    # RewriteCond %{REQUEST_FILENAME} !-f
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule ^(.*)$ index.php [QSA,L]
+
+</IfModule>

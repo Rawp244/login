@@ -1,101 +1,102 @@
 <?php
-<<<<<<< HEAD
 // backend/model/UserModel.php
 
 require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../utils/Logger.php';
 
 class UserModel {
     private $conn;
-    private $table_name = "usuarios";
+    private $logger;
+    private $table_name = "public.usuarios"; // Sua tabela de usuários
 
     public function __construct() {
         $database = new Database();
         $this->conn = $database->getConnection();
+        $this->logger = new Logger();
     }
 
-    public function salvarUsuario($email, $senha) {
-        // Adicione um TRY-CATCH para capturar a exceção de violação de unicidade
+    public function salvarUsuario($username, $senha, $role = 'user') {
+        if ($this->buscarUsuarioPorUsername($username)) {
+            return ["erro" => "Nome de usuário já existe."];
+        }
+
+        $query = "INSERT INTO " . $this->table_name . " (username, senha, role) VALUES (:username, :senha, :role)";
+        $stmt = $this->conn->prepare($query);
+
+        $hashed_password = password_hash($senha, PASSWORD_BCRYPT);
+
+        // Ajustado para usar o nome de usuário (que contém o e-mail) para sanitização
+        $username_sanitized = htmlspecialchars(strip_tags($username));
+        $role_sanitized = htmlspecialchars(strip_tags($role));
+
+        $stmt->bindParam(":username", $username_sanitized);
+        $stmt->bindParam(":senha", $hashed_password);
+        $stmt->bindParam(":role", $role_sanitized);
+
         try {
-            $query = "INSERT INTO " . $this->table_name . " (email, senha) VALUES (:email, :senha)";
-            $stmt = $this->conn->prepare($query);
-
-            $senhaHash = password_hash($senha, PASSWORD_BCRYPT); // Criptografar a senha
-
-            $stmt->bindParam(":email", $email);
-            $stmt->bindParam(":senha", $senhaHash);
-
             if ($stmt->execute()) {
-                return true;
+                $this->logger->log(Logger::INFO, "Usuário registrado: " . $username_sanitized);
+                return ["mensagem" => "Usuário registrado com sucesso."];
             }
         } catch (PDOException $e) {
-            // Captura a exceção de violação de unicidade (SQLSTATE[23505])
-            // Isso permite que o Controller trate a mensagem de "email já existe"
-            if ($e->getCode() == '23505') { // Código para Unique violation no PostgreSQL
-                // Não lança o erro, apenas retorna false para indicar falha
-                return false;
-            }
-            // Para outros erros de DB não relacionados a duplicidade, você pode relançar
-            // ou logar e retornar false, dependendo da sua estratégia de erro.
-            // Por enquanto, apenas retorna false para qualquer PDOException não tratada especificamente.
-            return false;
+            $this->logger->log(Logger::ERROR, "Erro ao registrar usuário: " . $e->getMessage());
+            return ["erro" => "Erro ao registrar usuário: " . $e->getMessage()];
         }
-        return false; // Em caso de falha no execute() por algum outro motivo não capturado acima
+        return ["erro" => "Não foi possível registrar o usuário."];
     }
 
-    // MÉTODO DE LOGIN E VERIFICAÇÃO DE EXISTÊNCIA (CORRIGIDO)
-    // O parâmetro $senha é opcional e serve para diferenciar entre login e apenas verificação de existência
-    public function buscarUsuarioPorEmailESenha($email, $senha = null) {
-        $query = "SELECT id, email, senha FROM " . $this->table_name . " WHERE email = :email LIMIT 1";
-
+    public function buscarUsuarioPorUsername($username) {
+        $query = "SELECT id, username, senha, role FROM " . $this->table_name . " WHERE username = :username LIMIT 1";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":email", $email);
+        $username_sanitized = htmlspecialchars(strip_tags($username));
+        $stmt->bindParam(":username", $username_sanitized);
         $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+    public function lerTodosUsuarios() {
+        // CORREÇÃO AQUI: Selecionar 'username' (que contém o e-mail) e ordenar por 'id'
+        $query = "SELECT id, username, role FROM " . $this->table_name . " ORDER BY id ASC";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
-        if (!$usuario) {
-            return false; // Usuário não encontrado
-        }
+    public function atualizarPerfilUsuario($id, $role) {
+        $query = "UPDATE " . $this->table_name . " SET role = :role WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
 
-        // Se a senha foi fornecida (para LOGIN), verifique-a
-        // Verificamos se $senha não é null E não é uma string vazia
-        if ($senha !== null && $senha !== '') {
-            if (password_verify($senha, $usuario['senha'])) {
-                return $usuario; // Login bem-sucedido: e-mail e senha corretos
-            } else {
-                return false; // Senha incorreta
+        $role_sanitized = htmlspecialchars(strip_tags($role));
+
+        $stmt->bindParam(":role", $role_sanitized);
+        $stmt->bindParam(":id", $id);
+
+        try {
+            if ($stmt->execute()) {
+                $this->logger->log(Logger::INFO, "Perfil do usuário ID {$id} atualizado para: " . $role_sanitized);
+                return ["mensagem" => "Perfil do usuário atualizado com sucesso."];
             }
-        } else {
-            // Se a senha NÃO foi fornecida (ou é vazia), significa que estamos apenas
-            // verificando a existência do usuário pelo e-mail.
-            // Neste caso, se o usuário foi encontrado, retorne-o.
-            return $usuario; // Usuário encontrado (para checagem de existência)
+        } catch (PDOException $e) {
+            $this->logger->log(Logger::ERROR, "Erro ao atualizar perfil do usuário ID {$id}: " . $e->getMessage());
+            return ["erro" => "Não foi possível atualizar o perfil do usuário."];
         }
+        return ["erro" => "Não foi possível atualizar o perfil do usuário."];
+    }
+
+    public function deletarUsuario($id) {
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":id", $id);
+
+        try {
+            if ($stmt->execute()) {
+                $this->logger->log(Logger::INFO, "Usuário ID {$id} deletado.");
+                return ["mensagem" => "Usuário deletado com sucesso."];
+            }
+        } catch (PDOException $e) {
+            $this->logger->log(Logger::ERROR, "Erro ao deletar usuário ID {$id}: " . $e->getMessage());
+        }
+        return ["erro" => "Não foi possível deletar o usuário."];
     }
 }
 ?>
-=======
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-require_once '../config/db.php';
-
-class UserModel {
-    public function salvarUsuario($email, $senha) {
-        $pdo = getConexao();
-        $sql = "INSERT INTO usuarios (email, senha) VALUES (:email, :senha)";
-        $stmt = $pdo->prepare($sql);
-        $senhaCriptografada = password_hash($senha, PASSWORD_BCRYPT);
-
-        try {
-            $stmt->execute([
-                ':email' => $email,
-                ':senha' => $senhaCriptografada
-            ]);
-            return ["mensagem" => "Usuário salvo com sucesso"];
-        } catch (PDOException $e) {
-            return ["erro" => "Erro ao salvar usuário: " . $e->getMessage()];
-        }
-    }
-}
->>>>>>> 6a1e99a490e7a70324a1eb194a411ddde497eaa0
